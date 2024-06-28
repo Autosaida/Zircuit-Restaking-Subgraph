@@ -1,0 +1,8 @@
+{
+  "mainnet": {
+    "ZtakingPool": {
+      "address": "0xF047ab4c75cebf0eB9ed34Ae2c186f3611aEAfa6",
+      "startBlock": 19237243
+    }
+  }
+}

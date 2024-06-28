@@ -1,0 +1,56 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: ZtakingPool
+    network: mainnet
+    source:
+      address: "0xF047ab4c75cebf0eB9ed34Ae2c186f3611aEAfa6"
+      abi: ZtakingPool
+      startBlock: 19237243
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - BlocklistChanged
+        - Deposit
+        - EIP712DomainChanged
+        - Migrate
+        - OwnershipTransferStarted
+        - OwnershipTransferred
+        - Paused
+        - SignerChanged
+        - TokenStakabilityChanged
+        - Unpaused
+        - Withdraw
+      abis:
+        - name: ZtakingPool
+          file: ./abis/ZtakingPool.json
+      eventHandlers:
+        - event: BlocklistChanged(address,bool)
+          handler: handleBlocklistChanged
+        - event: Deposit(indexed uint256,indexed address,indexed address,uint256)
+          handler: handleDeposit
+        - event: EIP712DomainChanged()
+          handler: handleEIP712DomainChanged
+        - event: Migrate(indexed uint256,indexed address,address[],address,address,uint256[])
+          handler: handleMigrate
+        - event: OwnershipTransferStarted(indexed address,indexed address)
+          handler: handleOwnershipTransferStarted
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: SignerChanged(address)
+          handler: handleSignerChanged
+        - event: TokenStakabilityChanged(address,bool)
+          handler: handleTokenStakabilityChanged
+        - event: Unpaused(address)
+          handler: handleUnpaused
+        - event: Withdraw(indexed uint256,indexed address,indexed address,uint256)
+          handler: handleWithdraw
+      file: ./src/ztaking-pool.ts
