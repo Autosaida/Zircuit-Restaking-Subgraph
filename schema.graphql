@@ -1,102 +1,108 @@
-type BlocklistChanged @entity(immutable: true) {
-  id: Bytes!
-  migrator: Bytes! # address
-  blocked: Boolean! # bool
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type Staker @entity {
+  id: ID!
+
+  "Address of the staker"
+  address: Bytes!
+
+  "List of StakerTokenMetrics IDs representing deposit and withdraw metrics for each token by this staker"
+  tokenMetrics: [ID!]!
 }
 
-type Deposit @entity(immutable: true) {
-  id: Bytes!
-  eventId: BigInt! # uint256
-  depositor: Bytes! # address
-  token: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type StakerTokenMetrics @entity {
+  id: ID!
+
+  "Reference to the Staker entity"
+  staker: Staker!
+
+  "Token address"
+  token: Bytes!
+
+  "Deposit count for the token by this staker"
+  depositCount: BigInt!
+
+  "Deposit amount for the token by this staker"
+  depositAmount: BigInt!
+
+  "Withdraw count for the token by this staker"
+  withdrawCount: BigInt!
+
+  "Withdraw amount for the token by this staker"
+  withdrawAmount: BigInt!
 }
 
-type EIP712DomainChanged @entity(immutable: true) {
-  id: Bytes!
 
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type Token @entity {
+  id: ID!
+  
+  "Smart contract address of the token"
+  address: Bytes!
+
+  "Indicates whether the token is enabled for staking"
+  enabled: Boolean!
+
+  "Name of the token, mirrored from the smart contract"
+  name: String!
+
+  "Symbol of the token, mirrored from the smart contract"
+  symbol: String!
+
+  "The number of decimal places this token uses, default to 18"
+  decimals: Int!
+
+  "Total count of deposit transactions involving this token"
+  depositCount: BigInt!
+
+  "Total count of withdrawal transactions involving this token"
+  withdrawCount: BigInt!
+
+  "Total amount of this token deposited"
+  totalDepositAmount: BigInt!
+
+  "Total amount of this token withdrawn"
+  totalWithdrawalAmount: BigInt!
+
+  "Current staked amount of this token"
+  currentStakedAmount: BigInt!
+
+  "Timestamp of the last activity involving this token"
+  lastActivityAt: BigInt!
+
+  "Number of unique stakers that have interacted with this token"
+  uniqueStakerCount: BigInt!
 }
 
-type Migrate @entity(immutable: true) {
-  id: Bytes!
-  eventId: BigInt! # uint256
-  user: Bytes! # address
-  tokens: [Bytes!]! # address[]
-  destination: Bytes! # address
-  migrator: Bytes! # address
-  amounts: [BigInt!]! # uint256[]
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type DailySnapshot @entity {
+  id: ID!
+
+  "Date in YYYY-MM-DD format"
+  date: String!
+
+  "List of TokenDailyData IDs representing daily metrics for each token"
+  tokenData: [ID!]!
 }
 
-type OwnershipTransferStarted @entity(immutable: true) {
-  id: Bytes!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type TokenDailyData @entity {
+  id: ID!
+
+  "Reference to the DailySnapshot entity"
+  snapshot: DailySnapshot!
+
+  "Token address"
+  token: Bytes!
+
+  "Total deposit amount for this token on this day"
+  dailyDepositAmount: BigInt!
+
+  "Total deposit count for this token on this day"
+  dailyDepositCount: BigInt!
+
+  "Total withdraw amount for this token on this day"
+  dailyWithdrawAmount: BigInt!
+
+  "Total withdraw count for this token on this day"
+  dailyWithdrawCount: BigInt!
 }
 
-type OwnershipTransferred @entity(immutable: true) {
-  id: Bytes!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
 
-type Paused @entity(immutable: true) {
-  id: Bytes!
-  account: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
 
-type SignerChanged @entity(immutable: true) {
-  id: Bytes!
-  newSigner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
 
-type TokenStakabilityChanged @entity(immutable: true) {
-  id: Bytes!
-  token: Bytes! # address
-  enabled: Boolean! # bool
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Unpaused @entity(immutable: true) {
-  id: Bytes!
-  account: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Withdraw @entity(immutable: true) {
-  id: Bytes!
-  eventId: BigInt! # uint256
-  withdrawer: Bytes! # address
-  token: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
